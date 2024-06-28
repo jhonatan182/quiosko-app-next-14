@@ -1,8 +1,14 @@
 import OrderSidebar from '@/components/order/OrderSidebar';
 import OrderSummary from '@/components/order/OrderSummary';
+import { type Metadata } from 'next';
 
 type OrderLayoutProps = {
   children: React.ReactNode;
+};
+
+export const metadata: Metadata = {
+  title: 'Listado de ordenes',
+  description: 'Listado de tus ordenes favoritas',
 };
 
 export default function OrderLayout({ children }: OrderLayoutProps) {
