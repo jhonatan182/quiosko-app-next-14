@@ -14,6 +14,7 @@ const MIN_ITEM = 1;
 export default function OrderDetails({ item }: OrderDetailsProps) {
   const increaseQuantity = useStore((state) => state.increaseQuantity);
   const decreaseQuantity = useStore((state) => state.decreaseQuantity);
+  const removeOrder = useStore((state) => state.removeOrder);
 
   const disableDecreseButton = useMemo(
     () => item.quantity === MIN_ITEM,
@@ -30,7 +31,7 @@ export default function OrderDetails({ item }: OrderDetailsProps) {
         <div className="flex justify-between items-start">
           <p className="text-xl font-bold">{item.name} </p>
 
-          <button type="button" onClick={() => {}}>
+          <button type="button" onClick={() => removeOrder(item.id)}>
             <XCircleIcon className="text-red-600 h-8 w-8" />
           </button>
         </div>

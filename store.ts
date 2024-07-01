@@ -7,6 +7,7 @@ type Store = {
   addToOrder: (product: Product) => void;
   increaseQuantity: (id: Product['id']) => void;
   decreaseQuantity: (id: Product['id']) => void;
+  removeOrder: (id: Product['id']) => void;
 };
 
 export const useStore = create<Store>((set, get) => ({
@@ -63,9 +64,13 @@ export const useStore = create<Store>((set, get) => ({
           }
         : item
     );
-
     set(() => ({
       order,
+    }));
+  },
+  removeOrder: (id) => {
+    set((state) => ({
+      order: state.order.filter((item) => item.id !== id),
     }));
   },
 }));
