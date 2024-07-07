@@ -1,5 +1,8 @@
+'use client';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import {
   FormControl,
@@ -14,24 +17,54 @@ import {
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { createOrder } from '@/actions/create-order-action';
+import { useEffect } from 'react';
+import { OrderValidFormSchema } from '@/schema';
+import { useStore } from '@/store';
 
-const orderSchema = z.object({
-  username: z.string().min(2, {
-    message: 'no pasaste perror',
-  }),
-});
+type FormCreateOrderProps = {
+  totalOrder: number;
+};
 
-export default function FormCreateOrder() {
-  const form = useForm<z.infer<typeof orderSchema>>({
-    resolver: zodResolver(orderSchema),
+export default function FormCreateOrder({ totalOrder }: FormCreateOrderProps) {
+  const order = useStore((state) => state.order);
+  const clearOrder = useStore((state) => state.clearOrder);
+
+  const form = useForm<z.infer<typeof OrderValidFormSchema>>({
+    resolver: zodResolver(OrderValidFormSchema),
     defaultValues: {
-      username: '',
+      name: '',
+      apellido: '',
     },
   });
 
-  const handleCreateOrder = () => {
-    createOrder();
+  const handleCreateOrder = async (
+    data: z.infer<typeof OrderValidFormSchema>
+  ) => {
+    try {
+      await createOrder({
+        name: data.name,
+        apellido: data.apellido,
+        total: totalOrder,
+        order: order,
+      });
+
+      form.reset();
+      clearOrder();
+      toast.success('Pedido Realizado Correctamente');
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
   };
+
+  useEffect(() => {
+    console.log(form.formState.errors);
+
+    if (Object.keys(form.formState.errors).length > 0) {
+      toast.error('Todos los campos son obligatorios');
+    }
+  }, [form.formState.errors]);
 
   return (
     <Form {...form}>
@@ -41,21 +74,45 @@ export default function FormCreateOrder() {
       >
         <FormField
           control={form.control}
-          name="username"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormControl>
                 <Input
-                  placeholder="shadcn"
+                  placeholder="Tu nombre"
                   {...field}
-                  error={form.formState.errors.username}
+                  error={form.formState.errors.name}
+                  type="text"
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <FormField
+          control={form.control}
+          name="apellido"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input
+                  placeholder="Tu apellido"
+                  {...field}
+                  error={form.formState.errors.apellido}
+                  type="text"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button
+          type="submit"
+          className="bg-black font-bold text-white w-full uppercase py-2 rounded"
+          disabled={form.formState.isSubmitting}
+        >
+          Confirmar pedido
+        </Button>
       </form>
     </Form>
   );

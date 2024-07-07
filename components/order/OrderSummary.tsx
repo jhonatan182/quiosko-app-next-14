@@ -31,7 +31,7 @@ export default function OrderSummary() {
             <span className="font-bold">{formatCurrency(total)}</span>
           </p>
 
-          <FormCreateOrder />
+          <FormCreateOrder totalOrder={total} />
         </div>
       )}
     </aside>
