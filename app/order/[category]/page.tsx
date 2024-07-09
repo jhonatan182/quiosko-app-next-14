@@ -1,3 +1,4 @@
+import Heading from '@/components/Heading';
 import ProductCard from '@/components/products/ProductCard';
 import prisma from '@/db/prisma';
 import { type Product } from '@prisma/client';
@@ -55,9 +56,7 @@ export default async function OrderDinamicPage({
 
   return (
     <>
-      <h1 className="text-2xl my-10">
-        Elige y personaliza tu pedido a continuación
-      </h1>
+      <Heading>Elige y personaliza tu pedido a continuación</Heading>
       <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4 items-center">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />

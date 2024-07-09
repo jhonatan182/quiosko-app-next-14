@@ -1,4 +1,4 @@
-export default function ProductsPage() {
+export default function AdminPage() {
   return (
     <div>
       <h1>Hello Page</h1>

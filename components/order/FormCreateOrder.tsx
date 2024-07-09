@@ -59,7 +59,6 @@ export default function FormCreateOrder({ totalOrder }: FormCreateOrderProps) {
   };
 
   useEffect(() => {
-    console.log(form.formState.errors);
 
     if (Object.keys(form.formState.errors).length > 0) {
       toast.error('Todos los campos son obligatorios');
