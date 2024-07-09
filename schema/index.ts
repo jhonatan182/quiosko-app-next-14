@@ -40,3 +40,12 @@ export const CreateOrderSchema = OrderValidFormSchema.extend({
     })
   ),
 });
+
+export const OrderIdSchema = z.object({
+  orderId: z
+    .string()
+    .transform((data) => parseInt(data))
+    .refine((value) => value > 0, {
+      message: 'Hay errores',
+    }),
+});
